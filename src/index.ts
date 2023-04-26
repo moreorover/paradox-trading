@@ -1,5 +1,24 @@
 import 'dotenv/config';
+import { configure, getLogger } from 'log4js';
 import { z } from 'zod';
+
+configure({
+  appenders: {
+    file: {
+      type: 'dateFile',
+      filename: 'logs/trader.log',
+      pattern: '-yyyy-MM-dd',
+      backups: 7,
+    },
+    console: { type: 'stdout' },
+  },
+  categories: {
+    default: {
+      appenders: ['file', 'console'],
+      level: 'ALL',
+    },
+  },
+});
 
 const envVariables = z.object({
   APCA_API_BASE_URL: z.string(),
@@ -18,4 +37,4 @@ declare global {
   }
 }
 
-console.log('Hello World!');
+getLogger().info(`Hello World!`);
