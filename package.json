@@ -1,0 +1,27 @@
+{
+  "name": "paradox-trading",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "rimraf ./build && tsc",
+    "prod": "npm run build && node build/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moreorover/paradox-trading.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/moreorover/paradox-trading/issues"
+  },
+  "homepage": "https://github.com/moreorover/paradox-trading#readme",
+  "devDependencies": {
+    "@types/node": "^18.16.1",
+    "rimraf": "^5.0.0",
+    "typescript": "^5.0.4"
+  }
+}
