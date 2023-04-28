@@ -4,6 +4,8 @@ import { configure, getLogger } from 'log4js';
 import WebSocket from 'ws';
 import { z } from 'zod';
 import { channel } from './discord';
+import { cleanText } from './utils/cleanText';
+import { getColorCode } from './utils/getColor';
 
 configure({
   appenders: {
@@ -46,25 +48,6 @@ declare global {
 // }
 
 // main();
-
-function getColor(value: number) {
-  // Calculate a value between 0 and 255 based on the input value
-  var red = Math.round((255 * value) / 100);
-  var blue = Math.round((255 * (100 - value)) / 100);
-
-  // Convert the red and blue values to hex strings and pad them with zeros if necessary
-  var redHex = red.toString(16).padStart(2, '0');
-  var blueHex = blue.toString(16).padStart(2, '0');
-
-  // Combine the red and blue components with a constant green component
-  return '#' + redHex + '00' + blueHex;
-}
-
-function cleanText(text: string) {
-  return text.replace(/&#(\d+);/g, function (match, dec) {
-    return String.fromCharCode(dec);
-  });
-}
 
 // const alpaca: Alpaca = new Alpaca();
 
@@ -115,7 +98,7 @@ type AlpacaMessage = {
 wss.on('message', async function (message: string) {
   getLogger().info('Message is ' + message);
   // message is a STRING
-  const currentEvent = JSON.parse(message)[0];
+  const currentEvent: AlpacaMessage = JSON.parse(message)[0];
   // "T": "n" newsEvent
   if (currentEvent.T === 'n') {
     // This is a news event
@@ -160,10 +143,10 @@ wss.on('message', async function (message: string) {
     const tickerSymbol = currentEvent.symbols[0];
 
     getLogger().info(`companyImpact: ${companyImpact}`);
-    getLogger().info(`color: ${getColor(companyImpact)}`);
+    getLogger().info(`color: ${getColorCode(companyImpact)}`);
 
     const embed = new EmbedBuilder()
-      .setColor(getColor(companyImpact) as ColorResolvable)
+      .setColor(getColorCode(companyImpact) as ColorResolvable)
       .setTitle(cleanText(currentEvent.headline.slice(0, 240) + '...'))
       .setURL(currentEvent.url)
       .setAuthor({
